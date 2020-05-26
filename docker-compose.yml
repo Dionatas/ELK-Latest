@@ -81,7 +81,6 @@ services:
     networks:
       - elastic
 
-
   kib01:
     image: docker.elastic.co/kibana/kibana:7.7.0
     container_name: kib01
@@ -92,7 +91,11 @@ services:
       ELASTICSEARCH_HOSTS: http://es01:9200
     networks:
       - elastic
-  
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
   apm-server:
     image: docker.elastic.co/apm/apm-server:7.7.0
     depends_on:
