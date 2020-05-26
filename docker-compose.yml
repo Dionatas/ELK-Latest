@@ -20,6 +20,10 @@ services:
       - 9200:9200
     networks:
       - elastic
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
 
   es02:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
